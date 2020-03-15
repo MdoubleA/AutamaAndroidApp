@@ -1,22 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="329dp"
+            android:layout_height="338dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginStart="35dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="48dp"
+            android:layout_marginRight="48dp"
+            app:srcCompat="@drawable/_ai1" />
+        <TextView
+            android:id="@+id/email"
+            android:layout_marginLeft="30dp"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/int5"/>
+        <TextView
+            android:id="@+id/tvname"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_below="@id/imageView" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="184dp"
-        android:layout_marginLeft="184dp"
-        android:layout_marginTop="145dp"
-        android:layout_marginEnd="169dp"
-        android:layout_marginRight="169dp"
-        android:layout_marginBottom="567dp"
-        android:text="Profile!" />
+        <TextView
+            android:id="@+id/tvlastname"
+            android:layout_marginLeft="30dp"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvname" />
+        <TextView
+            android:id="@+id/int1"
+            android:layout_marginLeft="30dp"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvlastname"/>
+        <TextView
+            android:id="@+id/int2"
+            android:layout_marginLeft="30dp"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/int1"/>
+
+        <TextView
+            android:id="@+id/int3"
+            android:layout_marginLeft="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/int2"
+            android:textSize="20sp" />
+        <TextView
+            android:id="@+id/int4"
+            android:layout_marginLeft="30dp"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/int3"/>
+        <TextView
+            android:id="@+id/int5"
+            android:textSize="20sp"
+            android:layout_marginLeft="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/int4"/>
+                <TextView
+                    android:id="@+id/bio"
+                    android:textSize="20sp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/email"/>
+    </RelativeLayout>
+    </ScrollView>
+
 </RelativeLayout>
