@@ -16,6 +16,8 @@ user_id all variables
 User_name() functions
 UserInformation classes
  */
+
+// Second Activity is the HOME page right now, which connects all the other pages
 public class SecondActivity extends AppCompatActivity {
     public static final String MY_MATCHES = "com.slackers.automa.MY_MATCHES";
     public static final String COUNTER = "com.slackers.automa.COUNTER";
