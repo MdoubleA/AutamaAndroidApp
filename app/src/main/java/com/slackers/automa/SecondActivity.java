@@ -23,7 +23,7 @@ public class SecondActivity extends AppCompatActivity {
     public static final String COUNTER = "com.slackers.automa.COUNTER";
     private Button switchToAi;
     private Button findMatchesbtn;
-    private int myMatches [] = new int[100];
+    private int[] myMatches = new int[100];
 
     //private Vector<Integer> myMatches = new Vector<>();
     private TextView Number_of_matches;
