@@ -30,6 +30,7 @@ public class CreateAccount extends AppCompatActivity {
         Info = (TextView) findViewById(R.id.myerror);
 
 
+        // Here is were would track login. Memory wiped after app close.
         CreateNAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
