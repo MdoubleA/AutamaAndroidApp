@@ -86,7 +86,7 @@ public class SecondActivity extends AppCompatActivity {
                     startActivity(i);
                 }
                 if(x1 > x2){
-                    Intent i = new Intent(SecondActivity.this, Choose_Match.class);
+                    Intent i = new Intent(SecondActivity.this, YourProfile.class);
                     i.putExtra(MY_MATCHES, myMatches);
                     i.putExtra(COUNTER, counter);
                     startActivity(i);
