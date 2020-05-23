@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -14,6 +15,22 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.Arrays;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.ConnectionSpec;
+import okhttp3.Credentials;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class MyConversation extends AppCompatActivity {
     public static final String MY_MATCHES = "com.slackers.automa.MY_MATCHES";
@@ -28,6 +45,13 @@ public class MyConversation extends AppCompatActivity {
     private int temp [] = new int[100];
     private int counter = 0;
     private int count;
+    private int autama_id = 0;
+    private String userName;
+    private String userPassword;
+    private OkHttpClient client = new OkHttpClient.Builder()
+            .connectionSpecs(Arrays.asList(ConnectionSpec.CLEARTEXT, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.MODERN_TLS))
+            .build(); // Mike
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +65,11 @@ public class MyConversation extends AppCompatActivity {
         counter = intent.getIntExtra(Choose_Match.COUNTER, 0);
         temp = intent.getIntArrayExtra(Choose_Match.MY_MATCHES);
         count = intent.getIntExtra(Choose_Match.COUNT, 0);
+
+        autama_id = intent.getIntExtra(Choose_Match.AUTAMA_ID, 0); // Mike
+        userName = intent.getStringExtra(Choose_Match.USERNAME); // Mike
+        userPassword = intent.getStringExtra(Choose_Match.USERPASSWORD); // Mike
+
         mydisplay = (TextView)findViewById(R.id.textView3);
         mydisplay.setText("Talking with AI: " + String.valueOf(counter));
         sendbtn.setText("Send Message");
@@ -64,14 +93,114 @@ public class MyConversation extends AppCompatActivity {
     }
 
     private void Send_Message(String message_to_send){
+        String post_url = "http://10.0.2.2:8000/api/v1/messages/";
         message.append(message_to_send + "(User Message)");
         send_message.setText("");
         message.append("\n");
-    //This is where the AI would send a reply
-        message.append("(message from AI)");
-        message.append("\n");
-        mscrollview.fullScroll(ScrollView.FOCUS_DOWN);
-        Close_Typer();
+
+
+        JSONObject post_data = new JSONObject();
+        try {
+            post_data.put("message", message_to_send);
+            post_data.put("sender", "User");
+            post_data.put("autamaID", autama_id);
+            post_data.put("userID", "jordan7");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        RequestBody post = RequestBody.create(
+                MediaType.parse("application/json"), post_data.toString());
+
+        String credential = Credentials.basic("jordan", "a");
+
+        Request request = new Request.Builder()
+                .url(post_url)
+                .header("Authorization", credential)
+                .header("AutamaID", Integer.toString(autama_id))
+                .post(post)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                MyConversation.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //This is where the AI would send a reply
+                        if (response.code() == 201) {
+                            message.append("(message from AI) " + Integer.toString(autama_id) + " "); // Mike
+                            try {
+
+                                JSONObject jsonObject = new JSONObject(response.body().string());
+                                String autama_response = jsonObject.getString("message");
+
+                                message.append(autama_response); // Mike
+                            } catch (IOException | JSONException e) {
+                                e.printStackTrace();
+                            }
+                            message.append("\n");
+                            mscrollview.fullScroll(ScrollView.FOCUS_DOWN);
+                            Close_Typer();
+                        }
+                        else {
+                            message.append("There has been an error");
+                            try {
+                                message.append(response.body().string().toString());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            message.append("\n");
+                            mscrollview.fullScroll(ScrollView.FOCUS_DOWN);
+                        }
+                    }
+                });
+            }
+        });
+
+        /*
+        *         // Get autama response ////////////////////////////////////////////////////////////////////////////////////////////////////
+	String post_url = "http://10.0.2.2:8000/api/v1/messages/?format=json";
+
+        String credential = Credentials.basic("jordan", "a");
+        request = new Request.Builder()
+                .url(post_url)
+                .header("Authorization", credential)
+                .header("AutamaID", Integer.toString(autama_id))
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                Log.d("HttpResponse", Integer.toString(response.code()));
+                MyConversation.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //This is where the AI would send a reply
+                        message.append("(message from AI) " + Integer.toString(autama_id)); // Mike
+                        try {
+                            message.append(response.body().string()); // Mike
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        message.append("\n");
+                        mscrollview.fullScroll(ScrollView.FOCUS_DOWN);
+                        Close_Typer();
+                    }
+                });
+            }
+        });
+
+        * */
     }
     public boolean onTouchEvent(MotionEvent touchevent){
         switch (touchevent.getAction()){

@@ -36,7 +36,7 @@ public class FindMatches extends AppCompatActivity {
         myimage = (ImageView)findViewById(R.id.MyImage);
         Back = (Button)findViewById(R.id.btnBackTo2nd);
         Back.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
+            public void onClick(View view) { // back button
                 Intent i = new Intent(FindMatches.this, SecondActivity.class);
                 i.putExtra(MY_MATCHES, temp);
                 i.putExtra(COUNTER, counter);

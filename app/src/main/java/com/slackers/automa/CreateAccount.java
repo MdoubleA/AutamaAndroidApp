@@ -4,11 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
@@ -35,6 +37,7 @@ public class CreateAccount extends AppCompatActivity {
     private OkHttpClient client = new OkHttpClient.Builder()
             .connectionSpecs(Arrays.asList(ConnectionSpec.CLEARTEXT, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.MODERN_TLS))
             .build();
+//    private  OkHttpClient client = new OkHttpClient.Builder().build();
 
 
     @Override
@@ -52,7 +55,13 @@ public class CreateAccount extends AppCompatActivity {
         CreateNAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkdatabase(NewUsername.getText().toString(), NewPassword.getText().toString());
+
+                try {
+                    checkdatabase(NewUsername.getText().toString(), NewPassword.getText().toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
         });
 
@@ -65,21 +74,25 @@ public class CreateAccount extends AppCompatActivity {
         });
     }
 
-    private void checkdatabase(String Username, String Password){
-        String post_url = "http://10.0.2.2:8000/api/v1/accounts/";
-        //String post_data = "{\\n\"username\":\"jordan\",\\n\"password\":\"a\"\\n}";
+    private void checkdatabase(String Username, String Password) throws IOException {
+        String post_url = "http://10.0.2.2:8000/api/v1/register/";
+        //String post_url = "https://autama-dev.ipq.co/api/v1/accounts/";
+        //String post_url = "http://10.0.2.2:8000/api/v1/accounts/";
+
+        if (Username.isEmpty()) {Username="jordan";}
+        if (Password.isEmpty()) {Password="a";}
 
         JSONObject post_data = new JSONObject();
         try {
-            post_data.put("username", "jordan");
-            post_data.put("password", "a");
+            post_data.put("username", Username);
+            post_data.put("password", Password);
+            post_data.put("apikey", "1a23");  // Need random apikey generation.
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         RequestBody postHeaderAndBody = RequestBody.create(
                 MediaType.parse("application/json"), post_data.toString());
-
 
         Request request = new Request.Builder()
                 .url(post_url)
@@ -94,18 +107,19 @@ public class CreateAccount extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
+                Log.d("Michael", Integer.toString(response.code()));
                 CreateAccount.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Info.setText(response.code());
+                        if (response.code() != 201) { // 201
+                            Info.setText("Try a different email and/or username.");
+                        }
+                        else {
+                            Info.setText("Your credentials check out.");
+                        }
                     }
                 });
-
             }
         });
-
-
-
-        //Info.setText("Searching...");
     }
 }
