@@ -35,6 +35,8 @@ import okhttp3.Response;
 public class MyConversation extends AppCompatActivity {
     public static final String MY_MATCHES = "com.slackers.automa.MY_MATCHES";
     public static final String COUNTER = "com.slackers.automa.COUNTER";
+    public static final String USERNAME = "com.slackers.automa.USERNAME"; // Mike
+    public static final String USERPASSWORD = "com.slackers.automa.USERPASSWORD"; // Mike
     private Button back_btn;
     private ScrollView mscrollview;
     private TextView mydisplay;
@@ -80,6 +82,8 @@ public class MyConversation extends AppCompatActivity {
                 Intent i = new Intent(MyConversation.this, Choose_Match.class);
                 i.putExtra(MY_MATCHES, temp);
                 i.putExtra(COUNTER, counter);
+                i.putExtra(USERNAME, userName);
+                i.putExtra(USERPASSWORD, userPassword);
                 startActivity(i);
             }
         });
@@ -93,7 +97,7 @@ public class MyConversation extends AppCompatActivity {
     }
 
     private void Send_Message(String message_to_send){
-        String post_url = "http://10.0.2.2:8000/api/v1/messages/";
+        String post_url = "http://10.0.2.2:8000/api/v1/messages/?username=" + userName + "&" + "api_key=" + userPassword;
         message.append(message_to_send + "(User Message)");
         send_message.setText("");
         message.append("\n");
@@ -104,7 +108,7 @@ public class MyConversation extends AppCompatActivity {
             post_data.put("message", message_to_send);
             post_data.put("sender", "User");
             post_data.put("autamaID", autama_id);
-            post_data.put("userID", "jordan7");
+            post_data.put("userID", userName);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -112,11 +116,11 @@ public class MyConversation extends AppCompatActivity {
         RequestBody post = RequestBody.create(
                 MediaType.parse("application/json"), post_data.toString());
 
-        String credential = Credentials.basic("jordan", "a");
+        //String credential = Credentials.basic("jordan", "a");
 
         Request request = new Request.Builder()
                 .url(post_url)
-                .header("Authorization", credential)
+                //.header("Authorization", credential)
                 .header("AutamaID", Integer.toString(autama_id))
                 .post(post)
                 .build();
@@ -161,46 +165,6 @@ public class MyConversation extends AppCompatActivity {
                 });
             }
         });
-
-        /*
-        *         // Get autama response ////////////////////////////////////////////////////////////////////////////////////////////////////
-	String post_url = "http://10.0.2.2:8000/api/v1/messages/?format=json";
-
-        String credential = Credentials.basic("jordan", "a");
-        request = new Request.Builder()
-                .url(post_url)
-                .header("Authorization", credential)
-                .header("AutamaID", Integer.toString(autama_id))
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Call call, final Response response) throws IOException {
-                Log.d("HttpResponse", Integer.toString(response.code()));
-                MyConversation.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //This is where the AI would send a reply
-                        message.append("(message from AI) " + Integer.toString(autama_id)); // Mike
-                        try {
-                            message.append(response.body().string()); // Mike
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        message.append("\n");
-                        mscrollview.fullScroll(ScrollView.FOCUS_DOWN);
-                        Close_Typer();
-                    }
-                });
-            }
-        });
-
-        * */
     }
     public boolean onTouchEvent(MotionEvent touchevent){
         switch (touchevent.getAction()){

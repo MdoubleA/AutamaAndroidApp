@@ -35,6 +35,10 @@ public class Choose_Match extends AppCompatActivity {
         Button btn = (Button)findViewById(R.id.btn1);
         userName = intent.getStringExtra(SecondActivity.USERNAME); // Mike
         userPassword = intent.getStringExtra(SecondActivity.USERPASSWORD); // Mike
+        if (userName == null) {
+            userName = intent.getStringExtra(MyConversation.USERNAME);
+            userPassword = intent.getStringExtra(MyConversation.USERPASSWORD);
+        }
         add_buttons();
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,6 +46,8 @@ public class Choose_Match extends AppCompatActivity {
                 Intent i = new Intent(Choose_Match.this, SecondActivity.class);
                 i.putExtra(MY_MATCHES, temp);
                 i.putExtra(COUNTER, counter);
+                i.putExtra(USERNAME, userName); // Mike
+                i.putExtra(USERPASSWORD, userPassword); // Mike
                 startActivity(i);
             }
         });
