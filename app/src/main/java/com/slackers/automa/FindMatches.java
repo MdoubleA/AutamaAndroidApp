@@ -22,8 +22,10 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.ConnectionSpec;
 import okhttp3.Credentials;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class FindMatches extends AppCompatActivity {
@@ -106,11 +108,6 @@ public class FindMatches extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    final Request matchRequest   = new Request.Builder()
-                            .url(post_url)
-                            .header("Authorization", credential)
-                            .build();
-
                     JSONObject post_data = new JSONObject();
                     try {
                         post_data.put("userID", userName);
@@ -118,6 +115,14 @@ public class FindMatches extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    RequestBody post = RequestBody.create(
+                            MediaType.parse("application/json"), post_data.toString());
+
+                    final Request matchRequest   = new Request.Builder()
+                            .url(post_url)
+                            .header("Authorization", credential)
+                            .post(post)
+                            .build();
 
                     client.newCall(matchRequest).enqueue(new Callback() {
                         @Override
@@ -157,7 +162,6 @@ public class FindMatches extends AppCompatActivity {
     }
 
     private void previousScreen() {
-        unmatchedAutama = null;
         Intent i = new Intent(FindMatches.this, SecondActivity.class);
         i.putExtra(MY_MATCHES, temp);
         //i.putExtra(COUNTER, counter);
