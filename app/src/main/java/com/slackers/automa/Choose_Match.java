@@ -24,7 +24,7 @@ public class Choose_Match extends AppCompatActivity {
     private int temp [] = new int[100];
     private int counter = 0;
     private int count = 0;
-    private int autama_id = 4; // Mike this is Zara
+    private int autama_id; // Mike this is Zara
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,14 +71,7 @@ public class Choose_Match extends AppCompatActivity {
         for (count = 1; count < counter + 1; count++) {
             LinearLayout layout = (LinearLayout) findViewById(R.id.rootlayout);
             newbtn = new Button(this);
-            //newbtn.setText("AI Name"+ String.valueOf(count)); //  String.toString(count)
-            newbtn.setText(userName);
-            if (userName == null) {
-                Log.d("Failure:", "the password is null.");
-            }
-            else {
-                Log.d("Success:", "The string is not null.");
-            }
+            newbtn.setText("AI Name"+ String.valueOf(count)); //  String.toString(count)
 
             layout.addView(newbtn);
         }

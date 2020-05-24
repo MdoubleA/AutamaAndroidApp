@@ -49,6 +49,10 @@ public class SecondActivity extends AppCompatActivity {
         counter = intent.getIntExtra(YourProfile.COUNTER, 0);
         userName = intent.getStringExtra(MainActivity.USERNAME);
         userPassword = intent.getStringExtra(MainActivity.USERPASSWORD);
+        if (userName == null) {
+            userName = intent.getStringExtra(FindMatches.USERNAME);
+            userPassword = intent.getStringExtra(FindMatches.USERPASSWORD);
+        }
 
         Number_of_matches= (TextView)findViewById(R.id.tvNumberOfMatches);
         Number_of_matches.setText("No of Matches: " + String.valueOf(counter));
