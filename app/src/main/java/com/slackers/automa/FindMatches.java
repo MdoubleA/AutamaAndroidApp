@@ -65,74 +65,67 @@ public class FindMatches extends AppCompatActivity {
 
         String post_url   = "http://10.0.2.2:8000/api/v1/unmatchedautama/";
         String credential = Credentials.basic(userName, userPassword);
-        Request request   = new Request.Builder()
+         final Request request   = new Request.Builder()
                 .url(post_url)
                 .header("Authorization", credential)
                 .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Call call, final Response response) throws IOException {
-                FindMatches.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            JSONObject jResponse = new JSONObject(response.body().string());
-                            unmatchedAutama      = jResponse.getJSONArray("objects");
-                            if (unmatchedAutama.length() == 0) {
-                                //Log.d("Error", "Looks you matched with all of them. ;)");
-                                unmatchedAutama = null;
-                            }
-                            if (unmatchedAutama == null) {
-                                // Give message saying there are no more autama to match with.
-                                Intent i = new Intent(FindMatches.this, SecondActivity.class);
-                                i.putExtra(MY_MATCHES, temp);
-                                //i.putExtra(COUNTER, counter);
-                                i.putExtra(USERNAME, userName);
-                                i.putExtra(USERPASSWORD, userPassword);
-                                startActivity(i);
-                            }
-
-                            Back.setOnClickListener(new View.OnClickListener() {
-                                public void onClick(View view) { // back button
-                                    Intent i = new Intent(FindMatches.this, SecondActivity.class);
-                                    i.putExtra(MY_MATCHES, temp);
-                                    //i.putExtra(COUNTER, counter);
-                                    i.putExtra(USERNAME, userName);
-                                    i.putExtra(USERPASSWORD, userPassword);
-                                    startActivity(i);
-                                }
-                            });
-
-                            myMatch.setOnClickListener(new View.OnClickListener() {
-                                public void onClick(View view) {
-                                    if (currAutama < unmatchedAutama.length()) {
-                                        changepicture();
-                                        currAutama++;
-                                        //currAutama++;
-                                    }
-                                }
-                            });
+        if (unmatchedAutama == null) {
+            // Give message saying there are no more autama to match with.
+            Intent i = new Intent(FindMatches.this, SecondActivity.class);
+            i.putExtra(MY_MATCHES, temp);
+            //i.putExtra(COUNTER, counter);
+            i.putExtra(USERNAME, userName);
+            i.putExtra(USERPASSWORD, userPassword);
+            startActivity(i);
 
 
-                            myDislike = (Button)findViewById(R.id.btnDislike);
-                            myDislike.setOnClickListener(new View.OnClickListener() {
-                                public void onClick(View view) {
-                                    changepicture();
-                                }
-                            });
-                        } catch (JSONException | IOException e) {
-                            e.printStackTrace();
-                        }
+            Back.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) { // back button
+                    Intent i = new Intent(FindMatches.this, SecondActivity.class);
+                    i.putExtra(MY_MATCHES, temp);
+                    //i.putExtra(COUNTER, counter);
+                    i.putExtra(USERNAME, userName);
+                    i.putExtra(USERPASSWORD, userPassword);
+                    startActivity(i);
+                }
+            });
+
+            myMatch.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    if (currAutama < unmatchedAutama.length()) {
+                        changepicture();
+                        currAutama++;
+                        //currAutama++;
                     }
-                });
+                }
+            });
+
+
+            myDislike = (Button) findViewById(R.id.btnDislike);
+            myDislike.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    changepicture();
+                }
+            });
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Response response = client.newCall(request).execute();
+
+                    JSONObject jResponse = new JSONObject(response.body().string());
+                    unmatchedAutama      = jResponse.getJSONArray("objects");
+                    if (unmatchedAutama.length() == 0) {
+                        //Log.d("Error", "Looks you matched with all of them. ;)");
+                        unmatchedAutama = null;
+                    }
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                }
             }
-        });
+        }).start();
     }
 
     private void changepicture(){
