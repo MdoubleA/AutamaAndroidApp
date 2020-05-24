@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void validate(final String userName, final String userPassword){
         final String[] apikey = {null};
-        String post_url   = "http://10.0.2.2:8000/api/v1/accounts/";
+        String post_url   = "http://52.38.158.185/api/v1/accounts/";
         String credential = Credentials.basic(userName, userPassword);
         Request request   = new Request.Builder()
                 .url(post_url)

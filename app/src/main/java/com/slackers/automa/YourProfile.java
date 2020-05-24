@@ -73,7 +73,7 @@ public class YourProfile extends AppCompatActivity {
     }
 
     private void Disiplay_Profile() {
-        String url = "http://10.0.2.2:8000/api/v1/autamas/?format=json";
+        String url = "http://52.38.158.185/api/v1/autamas/?format=json";
         Request request = new Request.Builder()
                 .url(url)
                 .build();
