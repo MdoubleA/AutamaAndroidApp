@@ -22,8 +22,10 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.ConnectionSpec;
 import okhttp3.Credentials;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class FindMatches extends AppCompatActivity {
@@ -63,9 +65,9 @@ public class FindMatches extends AppCompatActivity {
         userName = intent.getStringExtra(SecondActivity.USERNAME);
         userPassword = intent.getStringExtra(SecondActivity.USERPASSWORD);
 
-        String post_url   = "http://10.0.2.2:8000/api/v1/unmatchedautama/";
-        String credential = Credentials.basic(userName, userPassword);
-         final Request request   = new Request.Builder()
+        final String post_url   = "http://10.0.2.2:8000/api/v1/unmatchedautama/";
+        final String credential = Credentials.basic(userName, userPassword);
+        final Request request   = new Request.Builder()
                 .url(post_url)
                 .header("Authorization", credential)
                 .build();
@@ -79,7 +81,7 @@ public class FindMatches extends AppCompatActivity {
                     JSONObject jResponse = new JSONObject(response.body().string());
                     unmatchedAutama      = jResponse.getJSONArray("objects");
                     if (unmatchedAutama.length() == 0) {
-                        //Log.d("Error", "Looks you matched with all of them. ;)");
+                        Log.d("Error", "Looks you matched with all of them. ;)");
                         finish();
                         return;
                     }
@@ -98,6 +100,43 @@ public class FindMatches extends AppCompatActivity {
         myMatch.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 if (currAutama < unmatchedAutama.length()) {
+                    String autamaID = null;
+                    try {
+                        JSONObject anAutama = unmatchedAutama.getJSONObject(currAutama);
+                        autamaID = anAutama.getString("id");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    JSONObject post_data = new JSONObject();
+                    try {
+                        post_data.put("userID", userName);
+                        post_data.put("autamaID", autamaID);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    RequestBody post = RequestBody.create(
+                            MediaType.parse("application/json"), post_data.toString());
+
+                    final Request matchRequest   = new Request.Builder()
+                            .url(post_url)
+                            .header("Authorization", credential)
+                            .post(post)
+                            .build();
+
+                    client.newCall(matchRequest).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            Log.d("Response Code", Integer.toString(response.code()));
+                            Log.d("Response Body", response.body().string());
+                        }
+                    });
+
                     changepicture();
                     currAutama++;
                 }
