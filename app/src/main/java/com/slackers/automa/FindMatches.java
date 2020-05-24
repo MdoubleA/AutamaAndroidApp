@@ -70,7 +70,25 @@ public class FindMatches extends AppCompatActivity {
                 .header("Authorization", credential)
                 .build();
 
-        if (unmatchedAutama == null) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Response response = client.newCall(request).execute();
+
+                    JSONObject jResponse = new JSONObject(response.body().string());
+                    unmatchedAutama      = jResponse.getJSONArray("objects");
+                    if (unmatchedAutama.length() == 0) {
+                        Log.d("Error", "Looks you matched with all of them. ;)");
+                        unmatchedAutama = null;
+                    }
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+        if (unmatchedAutama != null) {
             // Give message saying there are no more autama to match with.
             Intent i = new Intent(FindMatches.this, SecondActivity.class);
             i.putExtra(MY_MATCHES, temp);
@@ -78,6 +96,7 @@ public class FindMatches extends AppCompatActivity {
             i.putExtra(USERNAME, userName);
             i.putExtra(USERPASSWORD, userPassword);
             startActivity(i);
+        }
 
 
             Back.setOnClickListener(new View.OnClickListener() {
@@ -108,24 +127,6 @@ public class FindMatches extends AppCompatActivity {
                     changepicture();
                 }
             });
-        }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Response response = client.newCall(request).execute();
-
-                    JSONObject jResponse = new JSONObject(response.body().string());
-                    unmatchedAutama      = jResponse.getJSONArray("objects");
-                    if (unmatchedAutama.length() == 0) {
-                        //Log.d("Error", "Looks you matched with all of them. ;)");
-                        unmatchedAutama = null;
-                    }
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
     }
 
     private void changepicture(){
