@@ -63,9 +63,9 @@ public class FindMatches extends AppCompatActivity {
         userName = intent.getStringExtra(SecondActivity.USERNAME);
         userPassword = intent.getStringExtra(SecondActivity.USERPASSWORD);
 
-        String post_url   = "http://10.0.2.2:8000/api/v1/unmatchedautama/";
-        String credential = Credentials.basic(userName, userPassword);
-         final Request request   = new Request.Builder()
+        final String post_url   = "http://10.0.2.2:8000/api/v1/unmatchedautama/";
+        final String credential = Credentials.basic(userName, userPassword);
+        final Request request   = new Request.Builder()
                 .url(post_url)
                 .header("Authorization", credential)
                 .build();
@@ -79,7 +79,7 @@ public class FindMatches extends AppCompatActivity {
                     JSONObject jResponse = new JSONObject(response.body().string());
                     unmatchedAutama      = jResponse.getJSONArray("objects");
                     if (unmatchedAutama.length() == 0) {
-                        //Log.d("Error", "Looks you matched with all of them. ;)");
+                        Log.d("Error", "Looks you matched with all of them. ;)");
                         finish();
                         return;
                     }
@@ -98,6 +98,40 @@ public class FindMatches extends AppCompatActivity {
         myMatch.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 if (currAutama < unmatchedAutama.length()) {
+                    String autamaID = null;
+                    try {
+                        JSONObject anAutama = unmatchedAutama.getJSONObject(currAutama);
+                        autamaID = anAutama.getString("id");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    final Request matchRequest   = new Request.Builder()
+                            .url(post_url)
+                            .header("Authorization", credential)
+                            .build();
+
+                    JSONObject post_data = new JSONObject();
+                    try {
+                        post_data.put("userID", userName);
+                        post_data.put("autamaID", autamaID);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    client.newCall(matchRequest).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            Log.d("Response Code", Integer.toString(response.code()));
+                            Log.d("Response Body", response.body().string());
+                        }
+                    });
+
                     changepicture();
                     currAutama++;
                 }
@@ -123,6 +157,7 @@ public class FindMatches extends AppCompatActivity {
     }
 
     private void previousScreen() {
+        unmatchedAutama = null;
         Intent i = new Intent(FindMatches.this, SecondActivity.class);
         i.putExtra(MY_MATCHES, temp);
         //i.putExtra(COUNTER, counter);
