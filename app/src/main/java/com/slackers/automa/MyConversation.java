@@ -97,10 +97,12 @@ public class MyConversation extends AppCompatActivity {
     }
 
     private void Send_Message(String message_to_send){
-        String post_url = "http://10.0.2.2:8000/api/v1/messages/?username=" + userName + "&" + "api_key=" + userPassword;
+        String post_url ="http://10.0.2.2:8000/api/v1/messages/";
+        //String post_url = "http://10.0.2.2:8000/api/v1/messages/?username=" + userName + "&" + "api_key=" + userPassword;
         message.append(message_to_send + "(User Message)");
         send_message.setText("");
         message.append("\n");
+        String credential = Credentials.basic(userName, userPassword);
         JSONObject post_data = new JSONObject();
         try {
             post_data.put("message", message_to_send);
@@ -114,6 +116,7 @@ public class MyConversation extends AppCompatActivity {
                 MediaType.parse("application/json"), post_data.toString());
         Request request = new Request.Builder()
                 .url(post_url)
+                .header("Authorization", credential)
                 .header("AutamaID", Integer.toString(autama_id))
                 .post(post)
                 .build();

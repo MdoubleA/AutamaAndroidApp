@@ -121,7 +121,8 @@ public class MainActivity extends AppCompatActivity {
 
                             Intent i = new Intent(MainActivity.this, SecondActivity.class);
                             i.putExtra(USERNAME, userName);
-                            i.putExtra(USERPASSWORD, apikey[0]);
+                            i.putExtra(USERPASSWORD, userPassword);
+                            //i.putExtra(USERPASSWORD, apikey[0]);
                             startActivity(i);
                         }
                     }

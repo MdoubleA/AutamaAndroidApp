@@ -1,8 +1,10 @@
 package com.slackers.automa;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +18,12 @@ import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Base64;
+
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -56,11 +63,7 @@ public class CreateAccount extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                try {
-                    checkdatabase(NewUsername.getText().toString(), NewPassword.getText().toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                checkdatabase(NewUsername.getText().toString(), NewPassword.getText().toString());
 
             }
         });
@@ -74,10 +77,17 @@ public class CreateAccount extends AppCompatActivity {
         });
     }
 
-    private void checkdatabase(String Username, String Password) throws IOException {
+    private void checkdatabase(String Username, String Password) {
         String post_url = "http://10.0.2.2:8000/api/v1/register/";
         //String post_url = "https://autama-dev.ipq.co/api/v1/accounts/";
         //String post_url = "http://10.0.2.2:8000/api/v1/accounts/";
+
+/*
+        KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+        keyGen.init(256); // for example
+        SecretKey secretKey = keyGen.generateKey();
+        String encodedKey = Base64.getEncoder().encodeToString(secretKey.getEncoded());
+ */
 
         if (Username.isEmpty()) {Username="jordan";}
         if (Password.isEmpty()) {Password="a";}
