@@ -101,8 +101,6 @@ public class MyConversation extends AppCompatActivity {
         message.append(message_to_send + "(User Message)");
         send_message.setText("");
         message.append("\n");
-
-
         JSONObject post_data = new JSONObject();
         try {
             post_data.put("message", message_to_send);
@@ -112,18 +110,14 @@ public class MyConversation extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         RequestBody post = RequestBody.create(
                 MediaType.parse("application/json"), post_data.toString());
-
-        //String credential = Credentials.basic("jordan", "a");
-
         Request request = new Request.Builder()
                 .url(post_url)
-                //.header("Authorization", credential)
                 .header("AutamaID", Integer.toString(autama_id))
                 .post(post)
                 .build();
+
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -140,8 +134,12 @@ public class MyConversation extends AppCompatActivity {
                             message.append("(message from AI) " + Integer.toString(autama_id) + " "); // Mike
                             try {
 
-                                JSONObject jsonObject = new JSONObject(response.body().string());
+                                JSONObject jsonObject  = new JSONObject(response.body().string());
                                 String autama_response = jsonObject.getString("message");
+                                String autamaID        = jsonObject.getString("autamaID");
+                                String userID          = jsonObject.getString("userID");
+                                String sender          = jsonObject.getString("sender");
+                                String timeStamp       = jsonObject.getString("timeStamp");
 
                                 message.append(autama_response); // Mike
                             } catch (IOException | JSONException e) {
