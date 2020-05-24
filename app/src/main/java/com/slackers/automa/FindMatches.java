@@ -79,8 +79,9 @@ public class FindMatches extends AppCompatActivity {
                     JSONObject jResponse = new JSONObject(response.body().string());
                     unmatchedAutama      = jResponse.getJSONArray("objects");
                     if (unmatchedAutama.length() == 0) {
-                        Log.d("Error", "Looks you matched with all of them. ;)");
-                        unmatchedAutama = null;
+                        //Log.d("Error", "Looks you matched with all of them. ;)");
+                        finish();
+                        return;
                     }
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
@@ -88,45 +89,46 @@ public class FindMatches extends AppCompatActivity {
             }
         }).start();
 
-        if (unmatchedAutama != null) {
-            // Give message saying there are no more autama to match with.
-            Intent i = new Intent(FindMatches.this, SecondActivity.class);
-            i.putExtra(MY_MATCHES, temp);
-            //i.putExtra(COUNTER, counter);
-            i.putExtra(USERNAME, userName);
-            i.putExtra(USERPASSWORD, userPassword);
-            startActivity(i);
-        }
+        Back.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) { // back button
+                FindMatches.this.previousScreen();
+            }
+        });
 
-
-            Back.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) { // back button
-                    Intent i = new Intent(FindMatches.this, SecondActivity.class);
-                    i.putExtra(MY_MATCHES, temp);
-                    //i.putExtra(COUNTER, counter);
-                    i.putExtra(USERNAME, userName);
-                    i.putExtra(USERPASSWORD, userPassword);
-                    startActivity(i);
+        myMatch.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                if (currAutama < unmatchedAutama.length()) {
+                    changepicture();
+                    currAutama++;
                 }
-            });
-
-            myMatch.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    if (currAutama < unmatchedAutama.length()) {
-                        changepicture();
-                        currAutama++;
-                        //currAutama++;
-                    }
+                else {
+                    FindMatches.this.previousScreen();
                 }
-            });
+            }
+        });
 
 
-            myDislike = (Button) findViewById(R.id.btnDislike);
-            myDislike.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
+        myDislike = (Button) findViewById(R.id.btnDislike);
+        myDislike.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                if (currAutama< unmatchedAutama.length()) {
+                    currAutama++;
                     changepicture();
                 }
-            });
+                else {
+                    FindMatches.this.previousScreen();
+                }
+            }
+        });
+    }
+
+    private void previousScreen() {
+        Intent i = new Intent(FindMatches.this, SecondActivity.class);
+        i.putExtra(MY_MATCHES, temp);
+        //i.putExtra(COUNTER, counter);
+        i.putExtra(USERNAME, userName);
+        i.putExtra(USERPASSWORD, userPassword);
+        startActivity(i);
     }
 
     private void changepicture(){
