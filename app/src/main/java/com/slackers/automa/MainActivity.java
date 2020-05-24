@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                                 jsonObject = new JSONObject(response.body().string());
                                 JSONArray jsonArray = jsonObject.getJSONArray("objects");
                                 JSONObject jUser = jsonArray.getJSONObject(0);
-                                apikey[0] = jUser.getString("apikey");
+                                //apikey[0] = jUser.getString("apikey");
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
