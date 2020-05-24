@@ -98,7 +98,7 @@ public class MyConversation extends AppCompatActivity {
     }
 
     private void Send_Message(String message_to_send){
-        String post_url ="http://52.38.158.185/api/v1/messages/";
+        String post_url ="http://10.0.2.2:8000/api/v1/messages/";
         //String post_url = "http://10.0.2.2:8000/api/v1/messages/?username=" + userName + "&" + "api_key=" + userPassword;
         message.append(message_to_send + "(User Message)");
         send_message.setText("");

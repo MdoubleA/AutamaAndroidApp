@@ -78,7 +78,7 @@ public class CreateAccount extends AppCompatActivity {
     }
 
     private void checkdatabase(String Username, String Password) {
-        String post_url = "http://52.38.158.185/api/v1/register/";
+        String post_url = "http://10.0.2.2:8000/api/v1/register/";
         //String post_url = "https://autama-dev.ipq.co/api/v1/accounts/";
         //String post_url = "http://10.0.2.2:8000/api/v1/accounts/";
 

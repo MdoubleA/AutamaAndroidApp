@@ -101,9 +101,11 @@ public class FindMatches extends AppCompatActivity {
             public void onClick(View view) {
                 if (currAutama < unmatchedAutama.length()) {
                     String autamaID = null;
+                    String an_interest = null;
                     try {
                         JSONObject anAutama = unmatchedAutama.getJSONObject(currAutama);
                         autamaID = anAutama.getString("id");
+                        an_interest = anAutama.getString("interest6");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
