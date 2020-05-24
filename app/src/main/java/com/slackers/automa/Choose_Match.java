@@ -10,6 +10,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.Arrays;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.ConnectionSpec;
+import okhttp3.Credentials;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 public class Choose_Match extends AppCompatActivity {
     public static final String MY_MATCHES = "com.slackers.automa.MY_MATCHES";
     public static final String COUNTER = "com.slackers.automa.COUNTER";
@@ -25,6 +40,11 @@ public class Choose_Match extends AppCompatActivity {
     private int counter = 0;
     private int count = 0;
     private int autama_id; // Mike this is Zara
+
+    private OkHttpClient client = new OkHttpClient.Builder()
+            .connectionSpecs(Arrays.asList(ConnectionSpec.CLEARTEXT, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.MODERN_TLS))
+            .build(); // Mike
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +59,65 @@ public class Choose_Match extends AppCompatActivity {
             userName = intent.getStringExtra(MyConversation.USERNAME);
             userPassword = intent.getStringExtra(MyConversation.USERPASSWORD);
         }
-        add_buttons();
+
+        String post_url   = "http://10.0.2.2:8000/api/v1/mymatches/";
+        String credential = Credentials.basic(userName, userPassword);
+        Request request   = new Request.Builder()
+                .url(post_url)
+                .header("Authorization", credential)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                Choose_Match.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            JSONObject jResponse = new JSONObject(response.body().string());
+                            JSONArray  matches   = jResponse.getJSONArray("objects");
+                            Choose_Match.this.counter = matches.length();
+
+                            if (counter > 0) {
+                                Button[] btn = new Button[counter];
+                                LinearLayout layout = (LinearLayout) findViewById(R.id.rootlayout);
+                                for(int i = 0; i < counter; i++) {
+                                    JSONObject a_match = matches.optJSONObject(i);
+                                    autama_id = a_match.getInt("autamaID");
+
+                                    btn[i] = new Button(Choose_Match.this);
+                                    btn[i].setId(i);
+                                    btn[i].setText("AI Name" + Integer.toString(autama_id));
+                                    layout.addView(btn[i]);
+                                    btn[i].setOnClickListener(new View.OnClickListener() {
+                                        public void onClick(View v) {
+                                            //your desired functionality
+                                            Intent i = new Intent(Choose_Match.this, MyConversation.class);
+                                            i.putExtra(MY_MATCHES, temp);
+                                            i.putExtra(COUNTER, counter);
+                                            i.putExtra(COUNT, count);
+                                            i.putExtra(AUTAMA_ID, autama_id); // Mike
+                                            i.putExtra(USERNAME, userName); // Mike
+                                            i.putExtra(USERPASSWORD, userPassword); // Mike
+                                            startActivity(i);
+                                        }
+                                    });
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,38 +129,6 @@ public class Choose_Match extends AppCompatActivity {
                 startActivity(i);
             }
         });
-        if(counter > 0) {
-            newbtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(Choose_Match.this, MyConversation.class);
-                    i.putExtra(MY_MATCHES, temp);
-                    i.putExtra(COUNTER, counter);
-                    i.putExtra(COUNT, count);
-                    i.putExtra(AUTAMA_ID, autama_id); // Mike
-                    i.putExtra(USERNAME, userName); // Mike
-                    i.putExtra(USERPASSWORD, userPassword); // Mike
-
-                    startActivity(i);
-                }
-            });
-        }
-    }
-    public void add_buttons(){ // Mike
-        int count;
-        // Make server call with username and api_key
-        // get ids of all matched autama int[] all_matches = [0,1,2...]
-        // SET COUNTER TO NUMBER OF AUTAMA counter = all_matches.length()
-
-        for (count = 1; count < counter + 1; count++) {
-            LinearLayout layout = (LinearLayout) findViewById(R.id.rootlayout);
-            newbtn = new Button(this);
-            newbtn.setText("AI Name"+ String.valueOf(count)); //  String.toString(count)
-
-            layout.addView(newbtn);
-        }
-
-        autama_id = 4;
     }
     public boolean onTouchEvent(MotionEvent touchevent){
         switch (touchevent.getAction()){
