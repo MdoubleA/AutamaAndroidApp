@@ -43,8 +43,8 @@ public class SecondActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_page);
         Intent intent = getIntent();
-        myMatches = intent.getIntArrayExtra(FindMatches.MY_MATCHES);
-        counter = intent.getIntExtra(FindMatches.COUNTER, 0);
+        //myMatches = intent.getIntArrayExtra(FindMatches.MY_MATCHES);
+        //counter = intent.getIntExtra(FindMatches.COUNTER, 0);
         myMatches = intent.getIntArrayExtra(YourProfile.MY_MATCHES);
         counter = intent.getIntExtra(YourProfile.COUNTER, 0);
         userName = intent.getStringExtra(MainActivity.USERNAME);
@@ -66,7 +66,7 @@ public class SecondActivity extends AppCompatActivity {
         switchToAi.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent i = new Intent(SecondActivity.this, Choose_Match.class);
-                i.putExtra(MY_MATCHES, myMatches);
+                //i.putExtra(MY_MATCHES, myMatches);
                 i.putExtra(COUNTER, counter);
                 i.putExtra(USERNAME, userName);
                 i.putExtra(USERPASSWORD, userPassword);
