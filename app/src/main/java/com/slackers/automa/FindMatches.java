@@ -13,7 +13,7 @@ import java.util.Vector;
 
 public class FindMatches extends AppCompatActivity {
     public static final String MY_MATCHES = "com.slackers.automa.MY_MATCHES";
-    public static final String COUNTER = "com.slackers.automa.COUNTER";
+    //public static final String COUNTER = "com.slackers.automa.COUNTER";
     public static final String USERNAME = "com.slackers.automa.USERNAME"; // Mike
     public static final String USERPASSWORD = "com.slackers.automa.USERPASSWORD"; // Mike
     private String userName; // Mike
@@ -35,7 +35,7 @@ public class FindMatches extends AppCompatActivity {
         myMatch = (Button)findViewById(R.id.btnMatch);
         myDislike = (Button)findViewById(R.id.btnDislike);
         Intent intent = getIntent();
-        counter = intent.getIntExtra(SecondActivity.COUNTER, 0);
+        //counter = intent.getIntExtra(SecondActivity.COUNTER, 0);
         temp = intent.getIntArrayExtra(SecondActivity.MY_MATCHES);
         myimage = (ImageView)findViewById(R.id.MyImage);
         Back = (Button)findViewById(R.id.btnBackTo2nd);
@@ -45,7 +45,7 @@ public class FindMatches extends AppCompatActivity {
             public void onClick(View view) { // back button
                 Intent i = new Intent(FindMatches.this, SecondActivity.class);
                 i.putExtra(MY_MATCHES, temp);
-                i.putExtra(COUNTER, counter);
+                //i.putExtra(COUNTER, counter);
                 i.putExtra(USERNAME, userName);
                 i.putExtra(USERPASSWORD, userPassword);
                 startActivity(i);

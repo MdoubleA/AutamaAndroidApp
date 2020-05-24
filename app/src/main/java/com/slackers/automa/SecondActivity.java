@@ -44,7 +44,7 @@ public class SecondActivity extends AppCompatActivity {
         setContentView(R.layout.home_page);
         Intent intent = getIntent();
         myMatches = intent.getIntArrayExtra(FindMatches.MY_MATCHES);
-        counter = intent.getIntExtra(FindMatches.COUNTER, 0);
+        //counter = intent.getIntExtra(FindMatches.COUNTER, 0);
         myMatches = intent.getIntArrayExtra(YourProfile.MY_MATCHES);
         counter = intent.getIntExtra(YourProfile.COUNTER, 0);
         userName = intent.getStringExtra(MainActivity.USERNAME);

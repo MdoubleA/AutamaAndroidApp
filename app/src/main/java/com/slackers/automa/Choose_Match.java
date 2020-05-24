@@ -89,10 +89,12 @@ public class Choose_Match extends AppCompatActivity {
                                 for(int i = 0; i < counter; i++) {
                                     JSONObject a_match = matches.optJSONObject(i);
                                     autama_id = a_match.getInt("autamaID");
+                                    String autamaFirstName = a_match.getString("autamaFirstName");
+                                    String autamaLastName = a_match.getString("autamaLastName");
 
                                     btn[i] = new Button(Choose_Match.this);
                                     btn[i].setId(i);
-                                    btn[i].setText("AI Name" + Integer.toString(autama_id));
+                                    btn[i].setText("Autama: " + autamaFirstName + " " + autamaLastName + "(" + Integer.toString(autama_id) + ")");
                                     layout.addView(btn[i]);
                                     btn[i].setOnClickListener(new View.OnClickListener() {
                                         public void onClick(View v) {
