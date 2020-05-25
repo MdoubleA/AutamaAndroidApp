@@ -9,10 +9,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -39,6 +41,7 @@ public class FindMatches extends AppCompatActivity {
     private ImageView myimage;
     private Button myMatch;
     private Button myDislike;
+    private TextView ai_first, ai_last, ai_interest1, ai_interest2, ai_interest3, ai_interest4, ai_interest5, ai_interest6;
     private int currentPicture;
     private Button Back;
     private JSONArray unmatchedAutama = null;
@@ -55,6 +58,13 @@ public class FindMatches extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_matches);
+        ai_first = (TextView)findViewById(R.id.tvname);
+        ai_interest1 = (TextView)findViewById(R.id.int1);
+        ai_interest2 = (TextView)findViewById(R.id.int2);
+        ai_interest3 = (TextView)findViewById(R.id.int3);
+        ai_interest4 = (TextView)findViewById(R.id.int4);
+        ai_interest5 = (TextView)findViewById(R.id.int5);
+        ai_interest6 = (TextView)findViewById(R.id.int6);
         myMatch = (Button)findViewById(R.id.btnMatch);
         myDislike = (Button)findViewById(R.id.btnDislike);
         Intent intent = getIntent();
@@ -79,7 +89,7 @@ public class FindMatches extends AppCompatActivity {
                     Response response = client.newCall(request).execute();
 
                     JSONObject jResponse = new JSONObject(response.body().string());
-                    unmatchedAutama      = jResponse.getJSONArray("objects");
+                    unmatchedAutama = jResponse.getJSONArray("objects");
                     if (unmatchedAutama.length() == 0) {
                         Log.d("Error", "Looks you matched with all of them. ;)");
                         finish();
@@ -90,6 +100,39 @@ public class FindMatches extends AppCompatActivity {
                 }
             }
         }).start();
+        String autamaID = null;
+        String an_interest1 = null;
+        String an_interest2 = null;
+        String an_interest3 = null;
+        String an_interest4 = null;
+        String an_interest5 = null;
+        String an_interest6 = null;
+        String ai_first_name = null;
+        String ai_last_name = null;
+        JSONObject anAutama = null;
+        try {
+            anAutama = unmatchedAutama.getJSONObject(currAutama);
+            autamaID = anAutama.getString("id");
+            an_interest1 = anAutama.getString("interest1");
+            an_interest2 = anAutama.getString("interest2");
+            an_interest3 = anAutama.getString("interest3");
+            an_interest4 = anAutama.getString("interest4");
+            an_interest5 = anAutama.getString("interest5");
+            an_interest6 = anAutama.getString("interest6");
+            ai_first_name = anAutama.getString("first");
+            ai_last_name = anAutama.getString("last");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if(ai_first_name != null) {
+            ai_first.setText(ai_first_name + " " + ai_last_name);
+            ai_interest1.setText(an_interest1);
+            ai_interest2.setText(an_interest2);
+            ai_interest3.setText(an_interest3);
+            ai_interest4.setText(an_interest4);
+            ai_interest5.setText(an_interest5);
+            ai_interest6.setText(an_interest6);
+        }
 
         Back.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) { // back button
@@ -101,11 +144,9 @@ public class FindMatches extends AppCompatActivity {
             public void onClick(View view) {
                 if (currAutama < unmatchedAutama.length()) {
                     String autamaID = null;
-                    String an_interest = null;
                     try {
                         JSONObject anAutama = unmatchedAutama.getJSONObject(currAutama);
                         autamaID = anAutama.getString("id");
-                        an_interest = anAutama.getString("interest6");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

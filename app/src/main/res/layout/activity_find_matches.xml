@@ -1,74 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FindMatches">
 
-    <Button
-        android:id="@+id/btnDislike"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Dislike"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.179"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.701"
-        android:background="@drawable/dislikebtn"
-        />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="39dp"
+        android:layout_marginBottom="110dp">
 
-    <Button
-        android:id="@+id/btnMatch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="64dp"
-        android:layout_marginRight="64dp"
-        android:text="Match!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.701"
-        android:background="@drawable/likebtn"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Artificial Inteligence ID:"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.106" />
+            <Button
+                android:id="@+id/btnDislike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/MyImage"
+                android:layout_marginStart="100dp"
+                android:layout_marginLeft="176dp"
+                android:background="@drawable/dislikebtn"
+                android:text="Dislike" />
 
-    <ImageView
-        android:id="@+id/MyImage"
-        android:layout_width="326dp"
-        android:layout_height="333dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.608"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvID"
-        app:layout_constraintVertical_bias="0.128"
-        app:srcCompat="@drawable/_ai1" />
+            <Button
+                android:id="@+id/btnMatch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/MyImage"
+                android:layout_marginStart="200dp"
+                android:layout_marginLeft="176dp"
+                android:background="@drawable/likebtn"
+                android:text="Match!" />
+
+            <TextView
+                android:id="@+id/tvID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="145dp"
+                android:layout_marginLeft="145dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="136dp"
+                android:layout_marginRight="136dp"
+                android:text="Artificial Inteligence ID:" />
+
+            <ImageView
+                android:id="@+id/MyImage"
+                android:layout_width="326dp"
+                android:layout_height="300dp"
+                android:layout_below="@+id/tvID"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="45dp"
+                android:layout_marginLeft="45dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="56dp"
+                android:layout_marginRight="56dp"
+                app:srcCompat="@drawable/_ai1" />
+
+            <TextView
+                android:id="@+id/tvname"
+                android:layout_width="400dp"
+                android:layout_height="20dp"
+                android:layout_below="@+id/btnDislike"/>
+            <TextView
+                android:id="@+id/int1"
+                android:layout_width="400dp"
+                android:layout_height="20dp"
+                android:layout_below="@+id/tvname"/>
+            <TextView
+                android:id="@+id/int2"
+                android:layout_width="400dp"
+                android:layout_height="20dp"
+                android:layout_below="@+id/int1"/>
+            <TextView
+                android:id="@+id/int3"
+                android:layout_width="400dp"
+                android:layout_height="20dp"
+                android:layout_below="@+id/int2"/>
+            <TextView
+                android:id="@+id/int4"
+                android:layout_width="400dp"
+                android:layout_height="20dp"
+                android:layout_below="@+id/int3"/>
+            <TextView
+                android:id="@+id/int5"
+                android:layout_width="400dp"
+                android:layout_height="20dp"
+                android:layout_below="@+id/int4"/>
+            <TextView
+                android:id="@+id/int6"
+                android:layout_width="400dp"
+                android:layout_height="20dp"
+                android:layout_below="@+id/int5"/>
+        </RelativeLayout>
+    </ScrollView>
 
     <Button
         android:id="@+id/btnBackTo2nd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Back"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.529"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.928" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="176dp"
+        android:layout_marginLeft="176dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="163dp"
+        android:layout_marginRight="163dp"
+        android:layout_marginBottom="36dp"
+        android:text="Back" />
+</RelativeLayout>
