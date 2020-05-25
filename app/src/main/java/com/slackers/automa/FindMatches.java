@@ -95,44 +95,15 @@ public class FindMatches extends AppCompatActivity {
                         finish();
                         return;
                     }
+                    else {
+                        FindMatches.this.populateProfile(currAutama);
+                    }
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
                 }
             }
         }).start();
-        String autamaID = null;
-        String an_interest1 = null;
-        String an_interest2 = null;
-        String an_interest3 = null;
-        String an_interest4 = null;
-        String an_interest5 = null;
-        String an_interest6 = null;
-        String ai_first_name = null;
-        String ai_last_name = null;
-        JSONObject anAutama = null;
-        try {
-            anAutama = unmatchedAutama.getJSONObject(currAutama);
-            autamaID = anAutama.getString("id");
-            an_interest1 = anAutama.getString("interest1");
-            an_interest2 = anAutama.getString("interest2");
-            an_interest3 = anAutama.getString("interest3");
-            an_interest4 = anAutama.getString("interest4");
-            an_interest5 = anAutama.getString("interest5");
-            an_interest6 = anAutama.getString("interest6");
-            ai_first_name = anAutama.getString("first");
-            ai_last_name = anAutama.getString("last");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        if(ai_first_name != null) {
-            ai_first.setText(ai_first_name + " " + ai_last_name);
-            ai_interest1.setText(an_interest1);
-            ai_interest2.setText(an_interest2);
-            ai_interest3.setText(an_interest3);
-            ai_interest4.setText(an_interest4);
-            ai_interest5.setText(an_interest5);
-            ai_interest6.setText(an_interest6);
-        }
+
 
         Back.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) { // back button
@@ -182,6 +153,7 @@ public class FindMatches extends AppCompatActivity {
 
                     changepicture();
                     currAutama++;
+                    FindMatches.this.populateProfile(currAutama);
                 }
                 else {
                     FindMatches.this.previousScreen();
@@ -202,6 +174,44 @@ public class FindMatches extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void populateProfile(int curr) {
+        if (curr < unmatchedAutama.length()) {
+            String autamaID = null;
+            String an_interest1 = null;
+            String an_interest2 = null;
+            String an_interest3 = null;
+            String an_interest4 = null;
+            String an_interest5 = null;
+            String an_interest6 = null;
+            String ai_first_name = null;
+            String ai_last_name = null;
+            JSONObject anAutama = null;
+            try {
+                anAutama = unmatchedAutama.getJSONObject(curr);
+                if (anAutama != null) {
+                    autamaID = anAutama.getString("id");
+                    an_interest1 = anAutama.getString("interest1");
+                    an_interest2 = anAutama.getString("interest2");
+                    an_interest3 = anAutama.getString("interest3");
+                    an_interest4 = anAutama.getString("interest4");
+                    an_interest5 = anAutama.getString("interest5");
+                    an_interest6 = anAutama.getString("interest6");
+                    ai_first_name = anAutama.getString("first");
+                    ai_last_name = anAutama.getString("last");
+                    ai_first.setText(ai_first_name + " " + ai_last_name);
+                    ai_interest1.setText(an_interest1);
+                    ai_interest2.setText(an_interest2);
+                    ai_interest3.setText(an_interest3);
+                    ai_interest4.setText(an_interest4);
+                    ai_interest5.setText(an_interest5);
+                    ai_interest6.setText(an_interest6);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void previousScreen() {
