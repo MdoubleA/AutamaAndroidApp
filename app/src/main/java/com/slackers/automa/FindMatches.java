@@ -42,7 +42,7 @@ public class FindMatches extends AppCompatActivity {
     private Button myMatch;
     private Button myDislike;
     private TextView ai_first, ai_last, ai_interest1, ai_interest2, ai_interest3, ai_interest4, ai_interest5, ai_interest6;
-    private int currentPicture;
+    private int currentPicture = -1;
     private Button Back;
     private JSONArray unmatchedAutama = null;
     private int currAutama = 0;
@@ -58,6 +58,9 @@ public class FindMatches extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_matches);
+        Intent intent = getIntent();
+        userName = intent.getStringExtra(SecondActivity.USERNAME);
+        userPassword = intent.getStringExtra(SecondActivity.USERPASSWORD);
         ai_first = (TextView)findViewById(R.id.tvname);
         ai_interest1 = (TextView)findViewById(R.id.int1);
         ai_interest2 = (TextView)findViewById(R.id.int2);
@@ -67,13 +70,8 @@ public class FindMatches extends AppCompatActivity {
         ai_interest6 = (TextView)findViewById(R.id.int6);
         myMatch = (Button)findViewById(R.id.btnMatch);
         myDislike = (Button)findViewById(R.id.btnDislike);
-        Intent intent = getIntent();
-        //counter = intent.getIntExtra(SecondActivity.COUNTER, 0);
-        //temp = intent.getIntArrayExtra(SecondActivity.MY_MATCHES);
         myimage = (ImageView)findViewById(R.id.MyImage);
         Back = (Button)findViewById(R.id.btnBackTo2nd);
-        userName = intent.getStringExtra(SecondActivity.USERNAME);
-        userPassword = intent.getStringExtra(SecondActivity.USERPASSWORD);
 
         final String post_url   = "http://10.0.2.2:8000/api/v1/unmatchedautama/";
         final String credential = Credentials.basic(userName, userPassword);
@@ -82,7 +80,7 @@ public class FindMatches extends AppCompatActivity {
                 .header("Authorization", credential)
                 .build();
 
-        new Thread(new Runnable() {
+        Thread serverCall = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -96,14 +94,19 @@ public class FindMatches extends AppCompatActivity {
                         return;
                     }
                     else {
-                        FindMatches.this.populateProfile(currAutama);
+                        FindMatches.this.populateProfile();
                     }
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
                 }
             }
-        }).start();
-
+        });
+        serverCall.start();
+        try {
+            serverCall.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         Back.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) { // back button
@@ -150,14 +153,8 @@ public class FindMatches extends AppCompatActivity {
                             Log.d("Response Body", response.body().string());
                         }
                     });
-
-                    changepicture();
-                    currAutama++;
-                    FindMatches.this.populateProfile(currAutama);
                 }
-                else {
-                    FindMatches.this.previousScreen();
-                }
+                FindMatches.this.nextAutama();
             }
         });
 
@@ -165,19 +162,19 @@ public class FindMatches extends AppCompatActivity {
         myDislike = (Button) findViewById(R.id.btnDislike);
         myDislike.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if (currAutama< unmatchedAutama.length()) {
-                    currAutama++;
-                    changepicture();
-                }
-                else {
-                    FindMatches.this.previousScreen();
-                }
+                FindMatches.this.nextAutama();
             }
         });
     }
 
-    private void populateProfile(int curr) {
-        if (curr < unmatchedAutama.length()) {
+    private void nextAutama() {
+        currAutama++;
+        FindMatches.this.populateProfile();
+    }
+
+    private void populateProfile() {
+        if (currAutama < unmatchedAutama.length()) {
+            FindMatches.this.changepicture();
             String autamaID = null;
             String an_interest1 = null;
             String an_interest2 = null;
@@ -189,7 +186,7 @@ public class FindMatches extends AppCompatActivity {
             String ai_last_name = null;
             JSONObject anAutama = null;
             try {
-                anAutama = unmatchedAutama.getJSONObject(curr);
+                anAutama = unmatchedAutama.getJSONObject(currAutama);
                 if (anAutama != null) {
                     autamaID = anAutama.getString("id");
                     an_interest1 = anAutama.getString("interest1");
@@ -211,6 +208,9 @@ public class FindMatches extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+        else {
+            FindMatches.this.previousScreen();
         }
     }
 
