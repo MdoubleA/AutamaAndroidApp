@@ -158,7 +158,6 @@ public class FindMatches extends AppCompatActivity {
             }
         });
 
-
         myDislike = (Button) findViewById(R.id.btnDislike);
         myDislike.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -245,7 +244,6 @@ public class FindMatches extends AppCompatActivity {
                     counter++;
                     changepicture();
                 }
-
 
                 break;
         }
