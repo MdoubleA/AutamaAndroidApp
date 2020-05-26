@@ -32,6 +32,8 @@ public class Choose_Match extends AppCompatActivity {
     public static final String AUTAMA_ID = "com.slackers.automa.AUTAMA_ID"; // Mike
     public static final String USERNAME = "com.slackers.automa.USERNAME"; // Mike
     public static final String USERPASSWORD = "com.slackers.automa.USERPASSWORD"; // Mike
+    public static final String AUTAMAFIRST = "com.slackers.automa.AUTAMAFIRST";
+    public static final String AUTAMALAST = "com.slackers.automa.AUTAMALAST";
     private String userName;
     private String userPassword;
     float x1, x2, y1, y2;
@@ -89,8 +91,8 @@ public class Choose_Match extends AppCompatActivity {
                                 for(int i = 0; i < counter; i++) {
                                     JSONObject a_match = matches.optJSONObject(i);
                                     autama_id = a_match.getInt("autamaID");
-                                    String autamaFirstName = a_match.getString("autamaFirstName");
-                                    String autamaLastName = a_match.getString("autamaLastName");
+                                    final String autamaFirstName = a_match.getString("autamaFirstName");
+                                    final String autamaLastName = a_match.getString("autamaLastName");
 
                                     btn[i] = new Button(Choose_Match.this);
                                     btn[i].setId(i);
@@ -106,6 +108,8 @@ public class Choose_Match extends AppCompatActivity {
                                             i.putExtra(AUTAMA_ID, autama_id); // Mike
                                             i.putExtra(USERNAME, userName); // Mike
                                             i.putExtra(USERPASSWORD, userPassword); // Mike
+                                            i.putExtra(AUTAMAFIRST, autamaFirstName);
+                                            i.putExtra(AUTAMALAST, autamaLastName);
                                             startActivity(i);
                                         }
                                     });

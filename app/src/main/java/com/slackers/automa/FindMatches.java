@@ -32,7 +32,6 @@ import okhttp3.Response;
 
 public class FindMatches extends AppCompatActivity {
     public static final String MY_MATCHES = "com.slackers.automa.MY_MATCHES";
-    //public static final String COUNTER = "com.slackers.automa.COUNTER";
     public static final String USERNAME = "com.slackers.automa.USERNAME"; // Mike
     public static final String USERPASSWORD = "com.slackers.automa.USERPASSWORD"; // Mike
     private String userName; // Mike
