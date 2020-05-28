@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Vector;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -45,7 +46,7 @@ public class FindMatches extends AppCompatActivity {
     private ImageView myimage;
     private Button myMatch;
     private Button myDislike;
-    private TextView ai_first, ai_last, ai_interest1, ai_interest2, ai_interest3, ai_interest4, ai_interest5, ai_interest6;
+    private TextView ai_first, ai_last, ai_interest1, ai_interest2, ai_interest3, ai_interest4, ai_interest5, ai_interest6, noMatchDialouge;
     private int currentPicture = -1;
     private Button Back;
     private JSONArray unmatchedAutama = null;
@@ -76,6 +77,8 @@ public class FindMatches extends AppCompatActivity {
         myDislike = (Button)findViewById(R.id.btnDislike);
         myimage = (ImageView)findViewById(R.id.MyImage);
         Back = (Button)findViewById(R.id.btnBackTo2nd);
+        noMatchDialouge = (TextView)findViewById(R.id.tvID);
+
 
         final String post_url   = serverRoot + "/api/v1/unmatchedautama/";
         final String credential = Credentials.basic(userName, userPassword);
@@ -94,6 +97,8 @@ public class FindMatches extends AppCompatActivity {
                     unmatchedAutama = jResponse.getJSONArray("objects");
                     if (unmatchedAutama.length() == 0) {
                         Log.d("Error", "Looks you matched with all of them. ;)");
+                        //noMatchDialouge.setText("Hey! Looks we have no more Autama left for you to match with.");
+                        //TimeUnit.SECONDS.sleep(3);
                         finish();
                         return;
                     }
@@ -163,12 +168,13 @@ public class FindMatches extends AppCompatActivity {
             }
         });
 
-        myDislike = (Button) findViewById(R.id.btnDislike);
+        //myDislike = (Button) findViewById(R.id.btnDislike);
         myDislike.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 FindMatches.this.nextAutama();
             }
         });
+
     }
 
     private void nextAutama() {
