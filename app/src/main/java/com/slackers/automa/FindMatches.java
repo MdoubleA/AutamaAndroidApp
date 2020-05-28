@@ -35,8 +35,10 @@ import okhttp3.Response;
 
 public class FindMatches extends AppCompatActivity {
     public static final String MY_MATCHES = "com.slackers.automa.MY_MATCHES";
-    public static final String USERNAME = "com.slackers.automa.USERNAME"; // Mike
-    public static final String USERPASSWORD = "com.slackers.automa.USERPASSWORD"; // Mike
+    public static final String USERNAME = "com.slackers.automa.USERNAME";
+    public static final String USERPASSWORD = "com.slackers.automa.USERPASSWORD";
+    public static final String SERVERROOT = "com.slackers.automa.SERVERROOT";
+    public static String serverRoot = null;
     private String userName; // Mike
     private String userPassword; // Mike
     float x1, x2, y1, y2;
@@ -51,8 +53,6 @@ public class FindMatches extends AppCompatActivity {
     private int temp [] = new int[100];
     int[] images = {R.drawable._ai1, R.drawable._ai2, R.drawable._ai3,R.drawable._ai4,R.drawable._ai5,R.drawable._ai6};
     private int counter = 0;
-    private final String post_root = "http://10.0.2.2:8000";
-
     private OkHttpClient client = new OkHttpClient.Builder()
             .connectionSpecs(Arrays.asList(ConnectionSpec.CLEARTEXT, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.MODERN_TLS))
             .build();
@@ -64,6 +64,7 @@ public class FindMatches extends AppCompatActivity {
         Intent intent = getIntent();
         userName = intent.getStringExtra(SecondActivity.USERNAME);
         userPassword = intent.getStringExtra(SecondActivity.USERPASSWORD);
+        serverRoot = intent.getStringExtra(SecondActivity.SERVERROOT);
         ai_first = (TextView)findViewById(R.id.tvname);
         ai_interest1 = (TextView)findViewById(R.id.int1);
         ai_interest2 = (TextView)findViewById(R.id.int2);
@@ -76,7 +77,7 @@ public class FindMatches extends AppCompatActivity {
         myimage = (ImageView)findViewById(R.id.MyImage);
         Back = (Button)findViewById(R.id.btnBackTo2nd);
 
-        final String post_url   = "http://10.0.2.2:8000/api/v1/unmatchedautama/";
+        final String post_url   = serverRoot + "/api/v1/unmatchedautama/";
         final String credential = Credentials.basic(userName, userPassword);
         final Request request   = new Request.Builder()
                 .url(post_url)
@@ -104,6 +105,7 @@ public class FindMatches extends AppCompatActivity {
                 }
             }
         });
+
         serverCall.start();
         try {
             serverCall.join();
@@ -224,6 +226,7 @@ public class FindMatches extends AppCompatActivity {
         i.putExtra(MY_MATCHES, temp);
         i.putExtra(USERNAME, userName);
         i.putExtra(USERPASSWORD, userPassword);
+        i.putExtra(SERVERROOT, serverRoot);
         startActivity(i);
     }
 
@@ -234,9 +237,8 @@ public class FindMatches extends AppCompatActivity {
     }
 
     private void displayPicture(String branch) throws InterruptedException {
-        String post_url = post_root + branch;
+        String post_url = serverRoot + branch;
         final Request request = new Request.Builder().url(post_url).build();
-
         Thread serverCall = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -252,6 +254,7 @@ public class FindMatches extends AppCompatActivity {
                 }
             }
         });
+
         serverCall.start();
         serverCall.join();
     }
