@@ -3,6 +3,8 @@ package com.slackers.automa;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -17,6 +19,7 @@ import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Vector;
 
@@ -48,6 +51,7 @@ public class FindMatches extends AppCompatActivity {
     private int temp [] = new int[100];
     int[] images = {R.drawable._ai1, R.drawable._ai2, R.drawable._ai3,R.drawable._ai4,R.drawable._ai5,R.drawable._ai6};
     private int counter = 0;
+    private final String post_root = "http://10.0.2.2:8000";
 
     private OkHttpClient client = new OkHttpClient.Builder()
             .connectionSpecs(Arrays.asList(ConnectionSpec.CLEARTEXT, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.MODERN_TLS))
@@ -172,8 +176,9 @@ public class FindMatches extends AppCompatActivity {
 
     private void populateProfile() {
         if (currAutama < unmatchedAutama.length()) {
-            FindMatches.this.changepicture();
+            //FindMatches.this.changepicture();
             String autamaID = null;
+            String autamaPicture = null;
             String an_interest1 = null;
             String an_interest2 = null;
             String an_interest3 = null;
@@ -187,6 +192,7 @@ public class FindMatches extends AppCompatActivity {
                 anAutama = unmatchedAutama.getJSONObject(currAutama);
                 if (anAutama != null) {
                     autamaID = anAutama.getString("id");
+                    autamaPicture = anAutama.getString("picture");
                     an_interest1 = anAutama.getString("interest1");
                     an_interest2 = anAutama.getString("interest2");
                     an_interest3 = anAutama.getString("interest3");
@@ -202,8 +208,9 @@ public class FindMatches extends AppCompatActivity {
                     ai_interest4.setText(an_interest4);
                     ai_interest5.setText(an_interest5);
                     ai_interest6.setText(an_interest6);
+                    FindMatches.this.displayPicture(autamaPicture);
                 }
-            } catch (JSONException e) {
+            } catch (JSONException | InterruptedException e) {
                 e.printStackTrace();
             }
         }
@@ -224,6 +231,29 @@ public class FindMatches extends AppCompatActivity {
         currentPicture++;
         currentPicture = currentPicture % images.length;
         myimage.setImageResource(images[currentPicture]);
+    }
+
+    private void displayPicture(String branch) throws InterruptedException {
+        String post_url = post_root + branch;
+        final Request request = new Request.Builder().url(post_url).build();
+
+        Thread serverCall = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Response response = null;
+                try {
+                    response = client.newCall(request).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (response.isSuccessful()) {
+                    final Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
+                    myimage.setImageBitmap(bitmap);
+                }
+            }
+        });
+        serverCall.start();
+        serverCall.join();
     }
 
     public boolean onTouchEvent(MotionEvent touchevent){
