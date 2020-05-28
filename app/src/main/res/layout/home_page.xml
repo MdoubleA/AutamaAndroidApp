@@ -17,6 +17,7 @@
         android:layout_marginEnd="168dp"
         android:layout_marginRight="168dp"
         android:layout_marginBottom="156dp"
+        android:background="@drawable/login_button"
         android:text="Talk!" />
 
     <Button
@@ -33,6 +34,7 @@
         android:layout_marginEnd="161dp"
         android:layout_marginRight="161dp"
         android:layout_marginBottom="111dp"
+        android:background="@drawable/login_button"
         android:text="Find Matches" />
 
     <TextView

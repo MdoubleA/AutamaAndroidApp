@@ -73,6 +73,7 @@
         android:layout_marginEnd="154dp"
         android:layout_marginRight="100dp"
         android:layout_marginBottom="0dp"
+        android:background="@drawable/login_button"
         tools:text="Send" />
 
     <Button
@@ -89,5 +90,6 @@
         android:layout_marginRight="34dp"
         android:layout_toStartOf="@+id/textView3"
         android:layout_toLeftOf="@+id/textView3"
+        android:background="@drawable/login_button"
         android:text="Back" />
 </RelativeLayout>
