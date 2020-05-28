@@ -3,6 +3,8 @@ package com.slackers.automa;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -17,8 +19,10 @@ import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Vector;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -32,24 +36,24 @@ import okhttp3.Response;
 
 public class FindMatches extends AppCompatActivity {
     public static final String MY_MATCHES = "com.slackers.automa.MY_MATCHES";
-    //public static final String COUNTER = "com.slackers.automa.COUNTER";
-    public static final String USERNAME = "com.slackers.automa.USERNAME"; // Mike
-    public static final String USERPASSWORD = "com.slackers.automa.USERPASSWORD"; // Mike
+    public static final String USERNAME = "com.slackers.automa.USERNAME";
+    public static final String USERPASSWORD = "com.slackers.automa.USERPASSWORD";
+    public static final String SERVERROOT = "com.slackers.automa.SERVERROOT";
+    public static String serverRoot = null;
     private String userName; // Mike
     private String userPassword; // Mike
     float x1, x2, y1, y2;
     private ImageView myimage;
     private Button myMatch;
     private Button myDislike;
-    private TextView ai_first, ai_last, ai_interest1, ai_interest2, ai_interest3, ai_interest4, ai_interest5, ai_interest6;
-    private int currentPicture;
+    private TextView ai_first, ai_last, ai_interest1, ai_interest2, ai_interest3, ai_interest4, ai_interest5, ai_interest6, noMatchDialouge;
+    private int currentPicture = -1;
     private Button Back;
     private JSONArray unmatchedAutama = null;
     private int currAutama = 0;
     private int temp [] = new int[100];
     int[] images = {R.drawable._ai1, R.drawable._ai2, R.drawable._ai3,R.drawable._ai4,R.drawable._ai5,R.drawable._ai6};
     private int counter = 0;
-
     private OkHttpClient client = new OkHttpClient.Builder()
             .connectionSpecs(Arrays.asList(ConnectionSpec.CLEARTEXT, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.MODERN_TLS))
             .build();
@@ -58,6 +62,10 @@ public class FindMatches extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_matches);
+        Intent intent = getIntent();
+        userName = intent.getStringExtra(SecondActivity.USERNAME);
+        userPassword = intent.getStringExtra(SecondActivity.USERPASSWORD);
+        serverRoot = intent.getStringExtra(SecondActivity.SERVERROOT);
         ai_first = (TextView)findViewById(R.id.tvname);
         ai_interest1 = (TextView)findViewById(R.id.int1);
         ai_interest2 = (TextView)findViewById(R.id.int2);
@@ -67,22 +75,19 @@ public class FindMatches extends AppCompatActivity {
         ai_interest6 = (TextView)findViewById(R.id.int6);
         myMatch = (Button)findViewById(R.id.btnMatch);
         myDislike = (Button)findViewById(R.id.btnDislike);
-        Intent intent = getIntent();
-        //counter = intent.getIntExtra(SecondActivity.COUNTER, 0);
-        //temp = intent.getIntArrayExtra(SecondActivity.MY_MATCHES);
         myimage = (ImageView)findViewById(R.id.MyImage);
         Back = (Button)findViewById(R.id.btnBackTo2nd);
-        userName = intent.getStringExtra(SecondActivity.USERNAME);
-        userPassword = intent.getStringExtra(SecondActivity.USERPASSWORD);
+        noMatchDialouge = (TextView)findViewById(R.id.tvID);
 
-        final String post_url   = "http://10.0.2.2:8000/api/v1/unmatchedautama/";
+
+        final String post_url   = serverRoot + "/api/v1/unmatchedautama/";
         final String credential = Credentials.basic(userName, userPassword);
         final Request request   = new Request.Builder()
                 .url(post_url)
                 .header("Authorization", credential)
                 .build();
 
-        new Thread(new Runnable() {
+        Thread serverCall = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -92,18 +97,26 @@ public class FindMatches extends AppCompatActivity {
                     unmatchedAutama = jResponse.getJSONArray("objects");
                     if (unmatchedAutama.length() == 0) {
                         Log.d("Error", "Looks you matched with all of them. ;)");
+                        //noMatchDialouge.setText("Hey! Looks we have no more Autama left for you to match with.");
+                        //TimeUnit.SECONDS.sleep(3);
                         finish();
                         return;
                     }
                     else {
-                        FindMatches.this.populateProfile(currAutama);
+                        FindMatches.this.populateProfile();
                     }
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        });
 
+        serverCall.start();
+        try {
+            serverCall.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         Back.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) { // back button
@@ -150,35 +163,30 @@ public class FindMatches extends AppCompatActivity {
                             Log.d("Response Body", response.body().string());
                         }
                     });
-
-                    changepicture();
-                    currAutama++;
-                    FindMatches.this.populateProfile(currAutama);
                 }
-                else {
-                    FindMatches.this.previousScreen();
-                }
+                FindMatches.this.nextAutama();
             }
         });
 
-
-        myDislike = (Button) findViewById(R.id.btnDislike);
+        //myDislike = (Button) findViewById(R.id.btnDislike);
         myDislike.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if (currAutama< unmatchedAutama.length()) {
-                    currAutama++;
-                    changepicture();
-                }
-                else {
-                    FindMatches.this.previousScreen();
-                }
+                FindMatches.this.nextAutama();
             }
         });
+
     }
 
-    private void populateProfile(int curr) {
-        if (curr < unmatchedAutama.length()) {
+    private void nextAutama() {
+        currAutama++;
+        FindMatches.this.populateProfile();
+    }
+
+    private void populateProfile() {
+        if (currAutama < unmatchedAutama.length()) {
+            //FindMatches.this.changepicture();
             String autamaID = null;
+            String autamaPicture = null;
             String an_interest1 = null;
             String an_interest2 = null;
             String an_interest3 = null;
@@ -189,9 +197,10 @@ public class FindMatches extends AppCompatActivity {
             String ai_last_name = null;
             JSONObject anAutama = null;
             try {
-                anAutama = unmatchedAutama.getJSONObject(curr);
+                anAutama = unmatchedAutama.getJSONObject(currAutama);
                 if (anAutama != null) {
                     autamaID = anAutama.getString("id");
+                    autamaPicture = anAutama.getString("picture");
                     an_interest1 = anAutama.getString("interest1");
                     an_interest2 = anAutama.getString("interest2");
                     an_interest3 = anAutama.getString("interest3");
@@ -207,19 +216,23 @@ public class FindMatches extends AppCompatActivity {
                     ai_interest4.setText(an_interest4);
                     ai_interest5.setText(an_interest5);
                     ai_interest6.setText(an_interest6);
+                    FindMatches.this.displayPicture(autamaPicture);
                 }
-            } catch (JSONException e) {
+            } catch (JSONException | InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+        else {
+            FindMatches.this.previousScreen();
         }
     }
 
     private void previousScreen() {
         Intent i = new Intent(FindMatches.this, SecondActivity.class);
         i.putExtra(MY_MATCHES, temp);
-        //i.putExtra(COUNTER, counter);
         i.putExtra(USERNAME, userName);
         i.putExtra(USERPASSWORD, userPassword);
+        i.putExtra(SERVERROOT, serverRoot);
         startActivity(i);
     }
 
@@ -227,6 +240,29 @@ public class FindMatches extends AppCompatActivity {
         currentPicture++;
         currentPicture = currentPicture % images.length;
         myimage.setImageResource(images[currentPicture]);
+    }
+
+    private void displayPicture(String branch) throws InterruptedException {
+        String post_url = serverRoot + branch;
+        final Request request = new Request.Builder().url(post_url).build();
+        Thread serverCall = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Response response = null;
+                try {
+                    response = client.newCall(request).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (response.isSuccessful()) {
+                    final Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
+                    myimage.setImageBitmap(bitmap);
+                }
+            }
+        });
+
+        serverCall.start();
+        serverCall.join();
     }
 
     public boolean onTouchEvent(MotionEvent touchevent){
@@ -245,7 +281,6 @@ public class FindMatches extends AppCompatActivity {
                     counter++;
                     changepicture();
                 }
-
 
                 break;
         }

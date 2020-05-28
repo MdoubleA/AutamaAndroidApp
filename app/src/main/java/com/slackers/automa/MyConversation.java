@@ -37,6 +37,8 @@ public class MyConversation extends AppCompatActivity {
     public static final String COUNTER = "com.slackers.automa.COUNTER";
     public static final String USERNAME = "com.slackers.automa.USERNAME"; // Mike
     public static final String USERPASSWORD = "com.slackers.automa.USERPASSWORD"; // Mike
+    public static final String SERVERROOT = "com.slackers.automa.SERVERROOT";
+    private static String serverRoot = null;
     private Button back_btn;
     private ScrollView mscrollview;
     private TextView mydisplay;
@@ -50,10 +52,12 @@ public class MyConversation extends AppCompatActivity {
     private int autama_id = 0;
     private String userName;
     private String userPassword;
+    private String autamaFirst;
+    private String autamaLast;
     private OkHttpClient client = new OkHttpClient.Builder()
             .connectionSpecs(Arrays.asList(ConnectionSpec.CLEARTEXT, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.MODERN_TLS))
             .build(); // Mike
-    //test
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,13 +72,14 @@ public class MyConversation extends AppCompatActivity {
         counter = intent.getIntExtra(Choose_Match.COUNTER, 0);
         temp = intent.getIntArrayExtra(Choose_Match.MY_MATCHES);
         count = intent.getIntExtra(Choose_Match.COUNT, 0);
-
         autama_id = intent.getIntExtra(Choose_Match.AUTAMA_ID, 0); // Mike
         userName = intent.getStringExtra(Choose_Match.USERNAME); // Mike
         userPassword = intent.getStringExtra(Choose_Match.USERPASSWORD); // Mike
-
+        serverRoot = intent.getStringExtra(Choose_Match.SERVERROOT);
+        autamaFirst = intent.getStringExtra(Choose_Match.AUTAMAFIRST);
+        autamaLast = intent.getStringExtra(Choose_Match.AUTAMALAST);
         mydisplay = (TextView)findViewById(R.id.textView3);
-        mydisplay.setText("Talking with AI: " + String.valueOf(counter));
+        mydisplay.setText("Talking with Autama: " + autamaFirst + " " + autamaLast + " id: " + Integer.toString(autama_id));
         sendbtn.setText("Send Message");
 
         back_btn.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +90,7 @@ public class MyConversation extends AppCompatActivity {
                 i.putExtra(COUNTER, counter);
                 i.putExtra(USERNAME, userName);
                 i.putExtra(USERPASSWORD, userPassword);
+                i.putExtra(SERVERROOT, serverRoot);
                 startActivity(i);
             }
         });
@@ -98,9 +104,8 @@ public class MyConversation extends AppCompatActivity {
     }
 
     private void Send_Message(String message_to_send){
-        String post_url ="http://10.0.2.2:8000/api/v1/messages/";
-        //String post_url = "http://10.0.2.2:8000/api/v1/messages/?username=" + userName + "&" + "api_key=" + userPassword;
-        message.append(message_to_send + "(User Message)");
+        String post_url = serverRoot + "/api/v1/messages/";
+        message.append("You (" + userName + "): " + message_to_send + "\n");
         send_message.setText("");
         message.append("\n");
         String credential = Credentials.basic(userName, userPassword);
@@ -135,7 +140,7 @@ public class MyConversation extends AppCompatActivity {
                     public void run() {
                         //This is where the AI would send a reply
                         if (response.code() == 201) {
-                            message.append("(message from AI) " + Integer.toString(autama_id) + " "); // Mike
+                            message.append(autamaFirst + " " + autamaLast + ": "); // Mike
                             try {
 
                                 JSONObject jsonObject  = new JSONObject(response.body().string());
@@ -149,7 +154,7 @@ public class MyConversation extends AppCompatActivity {
                             } catch (IOException | JSONException e) {
                                 e.printStackTrace();
                             }
-                            message.append("\n");
+                            message.append("\n\n");
                             mscrollview.fullScroll(ScrollView.FOCUS_DOWN);
                             Close_Typer();
                         }

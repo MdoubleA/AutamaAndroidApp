@@ -1,8 +1,6 @@
 package com.slackers.automa;
-
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,20 +9,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
-
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Base64;
-
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.ConnectionSpec;
@@ -40,11 +34,10 @@ public class CreateAccount extends AppCompatActivity {
     private Button CreateNAccount;
     private Button Back;
     private TextView Info;
-
+    private static String serverRoot = null;
     private OkHttpClient client = new OkHttpClient.Builder()
             .connectionSpecs(Arrays.asList(ConnectionSpec.CLEARTEXT, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.MODERN_TLS))
             .build();
-//    private  OkHttpClient client = new OkHttpClient.Builder().build();
 
 
     @Override
@@ -56,13 +49,13 @@ public class CreateAccount extends AppCompatActivity {
         CreateNAccount = (Button) findViewById(R.id.createaccount);
         Back = (Button) findViewById(R.id.backfromcreateaccount);
         Info = (TextView) findViewById(R.id.myerror);
-
+        Intent intent = getIntent();
+        serverRoot = intent.getStringExtra(MainActivity.SERVERROOT);
 
         // Here is were would track login. Memory wiped after app close.
         CreateNAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 checkdatabase(NewUsername.getText().toString(), NewPassword.getText().toString());
 
             }
@@ -78,9 +71,7 @@ public class CreateAccount extends AppCompatActivity {
     }
 
     private void checkdatabase(String Username, String Password) {
-        String post_url = "http://10.0.2.2:8000/api/v1/register/";
-        //String post_url = "https://autama-dev.ipq.co/api/v1/accounts/";
-        //String post_url = "http://10.0.2.2:8000/api/v1/accounts/";
+        String post_url = serverRoot + "/api/v1/register/";
 
 /*
         KeyGenerator keyGen = KeyGenerator.getInstance("AES");

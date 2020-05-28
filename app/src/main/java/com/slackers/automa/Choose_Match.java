@@ -1,7 +1,5 @@
 package com.slackers.automa;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,14 +7,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.Arrays;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.ConnectionSpec;
@@ -32,6 +27,10 @@ public class Choose_Match extends AppCompatActivity {
     public static final String AUTAMA_ID = "com.slackers.automa.AUTAMA_ID"; // Mike
     public static final String USERNAME = "com.slackers.automa.USERNAME"; // Mike
     public static final String USERPASSWORD = "com.slackers.automa.USERPASSWORD"; // Mike
+    public static final String AUTAMAFIRST = "com.slackers.automa.AUTAMAFIRST";
+    public static final String AUTAMALAST = "com.slackers.automa.AUTAMALAST";
+    public static final String SERVERROOT = "com.slackers.automa.SERVERROOT";
+    public static String serverRoot = null;
     private String userName;
     private String userPassword;
     float x1, x2, y1, y2;
@@ -40,7 +39,6 @@ public class Choose_Match extends AppCompatActivity {
     private int counter = 0;
     private int count = 0;
     private int autama_id; // Mike this is Zara
-
     private OkHttpClient client = new OkHttpClient.Builder()
             .connectionSpecs(Arrays.asList(ConnectionSpec.CLEARTEXT, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.MODERN_TLS))
             .build(); // Mike
@@ -55,12 +53,14 @@ public class Choose_Match extends AppCompatActivity {
         Button btn = (Button)findViewById(R.id.btn1);
         userName = intent.getStringExtra(SecondActivity.USERNAME); // Mike
         userPassword = intent.getStringExtra(SecondActivity.USERPASSWORD); // Mike
+        serverRoot = intent.getStringExtra(SecondActivity.SERVERROOT);
         if (userName == null) {
             userName = intent.getStringExtra(MyConversation.USERNAME);
             userPassword = intent.getStringExtra(MyConversation.USERPASSWORD);
+            serverRoot = intent.getStringExtra(MyConversation.SERVERROOT);
         }
 
-        String post_url   = "http://10.0.2.2:8000/api/v1/mymatches/";
+        String post_url   = serverRoot + "/api/v1/mymatches/";
         String credential = Credentials.basic(userName, userPassword);
         Request request   = new Request.Builder()
                 .url(post_url)
@@ -89,8 +89,8 @@ public class Choose_Match extends AppCompatActivity {
                                 for(int i = 0; i < counter; i++) {
                                     JSONObject a_match = matches.optJSONObject(i);
                                     autama_id = a_match.getInt("autamaID");
-                                    String autamaFirstName = a_match.getString("autamaFirstName");
-                                    String autamaLastName = a_match.getString("autamaLastName");
+                                    final String autamaFirstName = a_match.getString("autamaFirstName");
+                                    final String autamaLastName = a_match.getString("autamaLastName");
 
                                     btn[i] = new Button(Choose_Match.this);
                                     btn[i].setId(i);
@@ -106,6 +106,9 @@ public class Choose_Match extends AppCompatActivity {
                                             i.putExtra(AUTAMA_ID, autama_id); // Mike
                                             i.putExtra(USERNAME, userName); // Mike
                                             i.putExtra(USERPASSWORD, userPassword); // Mike
+                                            i.putExtra(AUTAMAFIRST, autamaFirstName);
+                                            i.putExtra(AUTAMALAST, autamaLastName);
+                                            i.putExtra(SERVERROOT, serverRoot);
                                             startActivity(i);
                                         }
                                     });
@@ -128,6 +131,7 @@ public class Choose_Match extends AppCompatActivity {
                 i.putExtra(COUNTER, counter);
                 i.putExtra(USERNAME, userName); // Mike
                 i.putExtra(USERPASSWORD, userPassword); // Mike
+                i.putExtra(SERVERROOT, serverRoot);
                 startActivity(i);
             }
         });

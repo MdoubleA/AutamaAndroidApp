@@ -1,7 +1,5 @@
 package com.slackers.automa;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,16 +8,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
-
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.Arrays;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.ConnectionSpec;
@@ -40,7 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView MyFlag;
     public static final String USERNAME = "com.slackers.automa.USERNAME"; // Mike
     public static final String USERPASSWORD = "com.slackers.automa.USERPASSWORD"; // Mike
-
+    public static final String SERVERROOT = "com.slackers.automa.SERVERROOT";
+    private static final String serverRoot = "http://10.0.2.2:8000";
     private OkHttpClient client = new OkHttpClient.Builder()
             .connectionSpecs(Arrays.asList(ConnectionSpec.CLEARTEXT, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.MODERN_TLS))
             .build();
@@ -49,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         MyFlag = (TextView)findViewById(R.id.Flag);
         Name = (EditText)findViewById(R.id.etName);
         Password = (EditText)findViewById(R.id.etPassword);
@@ -57,12 +50,12 @@ public class MainActivity extends AppCompatActivity {
         Login = (Button)findViewById(R.id.btnLogin);
         NewAcount = (Button)findViewById(R.id.btnnewac);
 
-
         // Link to create account
         NewAcount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, CreateAccount.class);
+                i.putExtra(SERVERROOT, serverRoot);
                 startActivity(i);
             }
         });
@@ -77,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void validate(final String userName, final String userPassword){
         final String[] apikey = {null};
-        String post_url   = "http://10.0.2.2:8000/api/v1/accounts/";
+        String post_url   = serverRoot + "/api/v1/accounts/";
         String credential = Credentials.basic(userName, userPassword);
         Request request   = new Request.Builder()
                 .url(post_url)
@@ -122,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
                             Intent i = new Intent(MainActivity.this, SecondActivity.class);
                             i.putExtra(USERNAME, userName);
                             i.putExtra(USERPASSWORD, userPassword);
+                            i.putExtra(SERVERROOT, serverRoot);
                             //i.putExtra(USERPASSWORD, apikey[0]);
                             startActivity(i);
                         }
