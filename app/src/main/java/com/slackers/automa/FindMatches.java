@@ -215,7 +215,6 @@ public class FindMatches extends AppCompatActivity {
     private void previousScreen() {
         Intent i = new Intent(FindMatches.this, SecondActivity.class);
         i.putExtra(MY_MATCHES, temp);
-        //i.putExtra(COUNTER, counter);
         i.putExtra(USERNAME, userName);
         i.putExtra(USERPASSWORD, userPassword);
         startActivity(i);
