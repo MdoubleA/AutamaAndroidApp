@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/ourmissiontxt"
+                android:layout_marginLeft="30dp"
+                android:textSize="30sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Our Mission"/>
+            <TextView
+                android:id="@+id/themissiontxt"
+                android:layout_marginLeft="30dp"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ourmissiontxt"
+                android:text="CHANGING THE WORLD - ONE AUTAMA AT A TIME WITH OPEN SOURCE BATTLE - A.I. MURDER IS NO CRIME GOOGLE ALEXA CORTANA SIRI HOUND A CHAMPION WILL RISE FROM THE DIGITAL UNDERGROUND LET'S CHANGE THE WORLD FOR BETTER THROUGH AUTAMA - YOU, AND I IF WE ALL JOIN FORCES - THE LIMIT IS THE SKY"/>
+            <ImageView
+                android:id="@+id/Sharicepic"
+                android:layout_width="329dp"
+                android:layout_height="338dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="35dp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="190dp"
+                android:layout_marginEnd="48dp"
+                android:layout_marginRight="48dp"
+                android:layout_below="@id/themissiontxt"
+                app:srcCompat="@drawable/_sharice" />
+            <TextView
+                android:id="@+id/sharicetxt"
+                android:layout_marginLeft="30dp"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/Sharicepic"
+                android:text="I enjoy learning, eating, sleeping, reading, and dancing. :)"/>
+            <ImageView
+                android:id="@+id/Nickpic"
+                android:layout_width="329dp"
+                android:layout_height="338dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="35dp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginEnd="48dp"
+                android:layout_marginRight="48dp"
+                android:layout_below="@id/sharicetxt"
+                android:layout_marginTop="510dp"
+                app:srcCompat="@drawable/_nick" />
+            <TextView
+                android:id="@+id/nicktxt"
+                android:layout_marginLeft="30dp"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Data Analyst with an interest in visualization, machine learning and supply chain management. With a passion for painting mini's, being attacked by a cat and movies."
+                android:layout_below="@id/Nickpic"/>
+            <ImageView
+                android:id="@+id/Ryanpic"
+                android:layout_width="329dp"
+                android:layout_height="338dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="35dp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginEnd="48dp"
+                android:layout_marginRight="48dp"
+                android:layout_marginTop="920dp"
+                android:layout_below="@id/nicktxt"
+                app:srcCompat="@drawable/_ryan" />
+            <TextView
+                android:id="@+id/ryantxt"
+                android:layout_marginLeft="30dp"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Graduating this August! I enjoy running/lifting with friends, football (Seahawks), Formula 1 (Red Bull), reef-tank keeping, Super Smash Bros Ultimate (Wolf main), used to play football (Offensive Tackle), and the trumpet."
+                android:layout_below="@id/Ryanpic"/>
+            <ImageView
+                android:id="@+id/Michaelpic"
+                android:layout_width="329dp"
+                android:layout_height="338dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="35dp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginEnd="48dp"
+                android:layout_marginRight="48dp"
+                android:layout_marginTop="1330dp"
+                android:layout_below="@id/ryantxt"
+                app:srcCompat="@drawable/_michael" />
+            <TextView
+                android:id="@+id/michaeltxt"
+                android:layout_marginLeft="30dp"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Aspiring software engineer and data scientist with a passion for Bayesian learning, performance validation, the art of taming the Chihuahua Terrier mix, and chickens."
+                android:layout_below="@id/Michaelpic"/>
+            <ImageView
+                android:id="@+id/Aaronpic"
+                android:layout_width="329dp"
+                android:layout_height="338dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="35dp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginEnd="48dp"
+                android:layout_marginRight="48dp"
+                android:layout_marginTop="1730dp"
+                android:layout_below="@id/michaeltxt"
+                app:srcCompat="@drawable/_aaron" />
+            <TextView
+                android:id="@+id/aarontxt"
+                android:layout_marginLeft="30dp"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My name is Aaron Herrera, I am a CS major at PSU. I was in charge of the android app for this project. Make sure to download it!"
+                android:layout_below="@id/Aaronpic"/>
+            <ImageView
+                android:id="@+id/Kevinpic"
+                android:layout_width="329dp"
+                android:layout_height="338dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="35dp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginEnd="48dp"
+                android:layout_marginRight="48dp"
+                android:layout_marginTop="2180dp"
+                android:layout_below="@id/aarontxt"
+                app:srcCompat="@drawable/_kevin" />
+            <TextView
+                android:id="@+id/kevintxt"
+                android:layout_marginLeft="30dp"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="When life gives you artificial intelligence, you make Autama."
+                android:layout_below="@id/Kevinpic"/>
+
+            <ImageView
+                android:id="@+id/Hoepic"
+                android:layout_width="329dp"
+                android:layout_height="338dp"
+                android:layout_below="@id/kevintxt"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="34dp"
+                android:layout_marginLeft="34dp"
+                android:layout_marginEnd="49dp"
+                android:layout_marginTop="2580dp"
+                android:layout_marginRight="49dp"
+                app:srcCompat="@drawable/_hoe" />
+
+            <TextView
+                android:id="@+id/howtxt"
+                android:layout_marginLeft="30dp"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Out of a keen interest in database, data science and artificial intelligence, especially human-computer interaction student at PSU and major is computer science."
+                android:layout_below="@id/Hoepic"/>
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

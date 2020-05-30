@@ -75,4 +75,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.47000003" />
 
+    <Button
+        android:id="@+id/aboutusbtn"
+        android:layout_width="114dp"
+        android:layout_height="49dp"
+        android:layout_marginBottom="28dp"
+        android:text="About Us!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="About Us!" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

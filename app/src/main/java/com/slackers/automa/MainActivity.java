@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private Button NewAcount;
     private int counter = 5;
     private TextView MyFlag;
+    private Button AboutUs;
     public static final String USERNAME = "com.slackers.automa.USERNAME"; // Mike
     public static final String USERPASSWORD = "com.slackers.automa.USERPASSWORD"; // Mike
     public static final String SERVERROOT = "com.slackers.automa.SERVERROOT";
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         Info = (TextView)findViewById(R.id.tvinfo);
         Login = (Button)findViewById(R.id.btnLogin);
         NewAcount = (Button)findViewById(R.id.btnnewac);
+        AboutUs = (Button)findViewById(R.id.aboutusbtn);
 
         // Link to create account
         NewAcount.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +66,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 validate(Name.getText().toString(), Password.getText().toString());
+            }
+        });
+
+        AboutUs.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, AboutUs.class);
+                startActivity(i);
             }
         });
     }
