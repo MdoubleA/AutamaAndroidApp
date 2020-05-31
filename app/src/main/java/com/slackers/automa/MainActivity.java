@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView MyFlag;
     private Button AboutUs;
     public static final String USERNAME = "com.slackers.automa.USERNAME"; // Mike
-    public static final String USERPASSWORD = "com.slackers.automa.USERPASSWORD"; // Mike
+    public static final String USERPASSWORD = "com.slackers.automa.USERPASSWORD";
     public static final String SERVERROOT = "com.slackers.automa.SERVERROOT";
     private static final String serverRoot = "http://10.0.2.2:8000";
     private OkHttpClient client = new OkHttpClient.Builder()
